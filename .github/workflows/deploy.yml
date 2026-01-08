@@ -1,0 +1,35 @@
+name: Build and Push Churn Image
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v2
+      with:
+        project_id: mlops-cht1-model-deployment
+        workload_identity_provider: projects/388936667662/locations/global/workloadIdentityPools/github/providers/my-repo
+
+    - name: Set up gcloud
+      uses: google-github-actions/setup-gcloud@v2
+
+    - name: Configure Docker auth
+      run: gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
+
+    - name: Build and push image
+      run: |
+        IMAGE=us-east1-docker.pkg.dev/mlops-cht1-model-deployment/ml-repo/churn-prediction:latest
+        docker build -t $IMAGE .
+        docker push $IMAGE

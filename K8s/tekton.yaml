@@ -1,0 +1,15 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun
+metadata:
+  generateName: churn-deploy-
+spec:
+  pipelineSpec:
+    tasks:
+    - name: deploy-task 
+      taskSpec:
+        steps:
+        - name: kubectl-deploy
+          image: bitnami/kubectl:latest
+          script: |
+            #!/bin/sh
+            kubectl apply -f https://raw.githubusercontent.com/ShaqMarketshade/marketshade-mlops-gke-deployment/main/K8s/deployment.yaml
