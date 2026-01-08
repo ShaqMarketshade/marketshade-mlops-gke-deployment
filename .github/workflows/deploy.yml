@@ -9,7 +9,7 @@ permissions:
   id-token: write
 
 jobs:
-  build:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -21,14 +21,17 @@ jobs:
       with:
         project_id: mlops-cht1-model-deployment
         workload_identity_provider: projects/388936667662/locations/global/workloadIdentityPools/github/providers/my-repo
+        service_account: tekton-deployer@mlops-cht1-model-deployment.iam.gserviceaccount.com
 
     - name: Set up gcloud
       uses: google-github-actions/setup-gcloud@v2
+      with:
+        project_id: mlops-cht1-model-deployment
 
     - name: Configure Docker auth
       run: gcloud auth configure-docker us-east1-docker.pkg.dev --quiet
 
-    - name: Build and push image
+    - name: Build and push Docker image
       run: |
         IMAGE=us-east1-docker.pkg.dev/mlops-cht1-model-deployment/ml-repo/churn-prediction:latest
         docker build -t $IMAGE .

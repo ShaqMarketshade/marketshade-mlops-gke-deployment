@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: churn-container
-        image: churn-prediction-image:latest
+        image: us-east1-docker.pkg.dev/mlops-cht1-model-deployment/ml-repo/churn-prediction:latest
         ports:
         - containerPort: 8080
 

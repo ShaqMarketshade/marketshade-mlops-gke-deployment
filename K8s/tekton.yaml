@@ -3,9 +3,10 @@ kind: PipelineRun
 metadata:
   generateName: churn-deploy-
 spec:
+  serviceAccountName: tekton-deployer
   pipelineSpec:
     tasks:
-    - name: deploy-task 
+    - name: deploy-task
       taskSpec:
         steps:
         - name: kubectl-deploy

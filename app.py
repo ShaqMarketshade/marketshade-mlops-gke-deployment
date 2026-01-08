@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
 import joblib
 import numpy as np
+import os
 
 app = Flask(__name__)
 
 # Load the trained model
-model = joblib.load('models/churn_prediction_model.pkl')
+MODEL_PATH = os.path.join(os.path.dirname(__file__), "churn_prediction_model.pkl")
+model = joblib.load(MODEL_PATH)
 
 @app.route('/predict', methods=['POST'])
 def predict():
